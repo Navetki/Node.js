@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const mongoose = require("mongoose");
+const { MongoMemoryServer } = require("mongodb-memory-server-core");
 const usersRouter = require("./routes/users");
 const booksRouter = require("./routes/books");
 
@@ -22,6 +24,26 @@ app.use((req, res) => {
 });
 
 const PORT = process.env.PORT || 3005;
-app.listen(PORT, () => {
-  console.log(`Сервер запущен по адресу http://127.0.0.1:${PORT}`);
-});
+
+async function startServer() {
+  try {
+    const mongoServer = await MongoMemoryServer.create({
+      binary: {
+        version: "6.0.5",
+        skipMD5: true,
+      },
+    });
+    const mongoUri = mongoServer.getUri();
+
+    await mongoose.connect(mongoUri);
+    console.log("Connected to MongoDB");
+
+    app.listen(PORT, () => {
+      console.log(`Сервер запущен по адресу http://127.0.0.1:${PORT}`);
+    });
+  } catch (err) {
+    console.error("Ошибка запуска сервера:", err);
+  }
+}
+
+startServer();
