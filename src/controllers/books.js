@@ -79,8 +79,14 @@ const deleteBook = (req, res) => {
 };
 
 const borrowBook = (req, res) => {
+  const { bookId } = req.body;
+
+  if (!bookId) {
+    return res.status(400).json({ error: "Не передан bookId в теле запроса" });
+  }
+
   return Book.findByIdAndUpdate(
-    req.params.book_id,
+    bookId,
     { $set: { userId: req.params.user_id } },
     { new: true },
   )
@@ -92,8 +98,14 @@ const borrowBook = (req, res) => {
 };
 
 const returnBook = (req, res) => {
+  const { bookId } = req.body;
+
+  if (!bookId) {
+    return res.status(400).json({ error: "Не передан bookId в теле запроса" });
+  }
+
   return Book.findByIdAndUpdate(
-    req.params.book_id,
+    bookId,
     { $set: { userId: null } },
     { new: true },
   )

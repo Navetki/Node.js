@@ -1,7 +1,27 @@
-const Datastore = require("nedb-promises");
-const booksDb = Datastore.create({
-  filename: "./src/data/books.db",
-  autoload: true,
-});
+const mongoose = require("mongoose");
 
-module.exports = booksDb;
+const bookSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      minlength: 2,
+    },
+    author: {
+      type: String,
+      required: true,
+      minlength: 2,
+    },
+    year: {
+      type: Number,
+      required: true,
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+    },
+  },
+  { versionKey: false },
+);
+
+module.exports = mongoose.model("book", bookSchema);

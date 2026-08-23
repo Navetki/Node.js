@@ -15,7 +15,7 @@ router.post("/books", createBook);
 router.put("/books/:book_id", updateBook);
 router.delete("/books/:book_id", deleteBook);
 
-router.post("/users/:user_id/books/:book_id", borrowBook);
-router.delete("/users/:user_id/books/:book_id", returnBook);
+router.post("/users/:user_id/books", borrowBook);
+router.delete("/users/:user_id/books", returnBook);
 
 module.exports = router;
